@@ -1,9 +1,12 @@
 package com.example.mikhail.cubike;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.mikhail.cubike.adapters.TrackAdapter;
@@ -21,13 +24,21 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         List<Track> tracks = new ArrayList<Track>();
 
-       Track ranevsckiyTrack = new Track("Таганрог Раневской","Отличный маршрут для тех, кто хочет узнать больше о жизни актрисы",2,15);
-        Track ranevsckiyTrack2 = new Track("Таганрог Чехова","Места, где А.П. Чехов провел молодость и зрелую часть жизни",1,1);
+        Track ranevsckiyTrack = new Track("Таганрог Раневской", "Отличный маршрут для тех, кто хочет узнать больше о жизни актрисы", 2, 15);
+        Track ranevsckiyTrack2 = new Track("Таганрог Чехова", "Места, где А.П. Чехов провел молодость и зрелую часть жизни", 1, 1);
         tracks.add(ranevsckiyTrack);
         tracks.add(ranevsckiyTrack2);
-        ListView listView = (ListView)this.findViewById(R.id.track_list);
-        TrackAdapter trackAdapter = new TrackAdapter(this,tracks);
+        ListView listView = (ListView) this.findViewById(R.id.track_list);
+        TrackAdapter trackAdapter = new TrackAdapter(this, tracks);
         listView.setAdapter(trackAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this,MapActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
