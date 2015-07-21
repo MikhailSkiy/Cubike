@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MapActivity extends ActionBarActivity {
 
-    private final ThreadLocal<GoogleMap> map_ = new ThreadLocal<>(); // Might be null if Google Play services APK is not available.
+    private GoogleMap map_; // Might be null if Google Play services APK is not available.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +52,12 @@ public class MapActivity extends ActionBarActivity {
 
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
-        if (map_.get() == null) {
+        if (map_ == null) {
             // Try to obtain the map from the SupportMapFragment.
-            map_.set(((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+            map_ = (((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap());
             // Check if we were successful in obtaining the map.
-            if (map_.get() != null) {
+            if (map_ != null) {
                 setUpMap();
             }
         }
