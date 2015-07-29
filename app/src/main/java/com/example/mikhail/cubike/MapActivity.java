@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.mikhail.cubike.adapters.PlacesAdapter;
@@ -12,7 +14,9 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +52,35 @@ public class MapActivity extends ActionBarActivity {
         PlacesAdapter trackAdapter = new PlacesAdapter(this, places);
         listView.setAdapter(trackAdapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        map_.addMarker(new MarkerOptions().position(
+                                new LatLng(47.2096054, 38.9352142)).icon(
+                                BitmapDescriptorFactory.defaultMarker()));
+                        CameraUpdate center1 = CameraUpdateFactory.newLatLng(new LatLng(47.2096054, 38.9352142));
+                        CameraUpdate zoom1 = CameraUpdateFactory.zoomTo(16);
+                        map_.moveCamera(center1);
+                        map_.animateCamera(zoom1);
+
+                        break;
+                    case 1:
+                        map_.addMarker(new MarkerOptions().position(
+                                new LatLng(47.2105, 38.9338999)).icon(
+                                BitmapDescriptorFactory.defaultMarker()));
+                        CameraUpdate center2 = CameraUpdateFactory.newLatLng(new LatLng(47.2105, 38.9338999));
+                        CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+
+
+                        map_.moveCamera(center2);
+                        map_.animateCamera(zoom);
+                        break;
+                }
+            }
+        });
+
     }
 
     private void setUpMapIfNeeded() {
@@ -67,6 +100,8 @@ public class MapActivity extends ActionBarActivity {
         CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(47.2092003, 38.9334364));
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(14);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

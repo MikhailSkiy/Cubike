@@ -6,11 +6,11 @@ package com.example.mikhail.cubike.model;
 public class Track {
     private String title;
     private String description;
-    private double duration;
+    private int duration;
     private int length;
     private int rating;
 
-    public Track(String title, String description, double duration, int length) {
+    public Track(String title, String description, int duration, int length) {
         this.title = title;
         this.description = description;
         this.duration = duration;
@@ -37,7 +37,7 @@ public class Track {
         return duration;
     }
 
-    public void setDuration(double duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
