@@ -1,50 +1,71 @@
 package com.example.mikhail.cubike;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.mikhail.cubike.adapters.TrackAdapter;
-import com.example.mikhail.cubike.model.Track;
+import com.example.mikhail.cubike.interfaces.UIactions;
+import com.example.mikhail.cubike.managers.RequestManager;
+import com.example.mikhail.cubike.model.Preview;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity implements UIactions{
+
+    private List<Preview> previews_;
+    private  ListView listView_;
+    private Context context_;
+    private RequestManager manager_ = new RequestManager(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        List<Track> tracks = new ArrayList<Track>();
 
-        Track ranevsckiyTrack = new Track("Таганрог Раневской", "Отличный маршрут для тех, кто хочет узнать больше о жизни актрисы", 2, 15);
-        Track ranevsckiyTrack2 = new Track("Таганрог Чехова", "Места, где А.П. Чехов провел молодость и зрелую часть жизни", 1, 1);
-        tracks.add(ranevsckiyTrack);
-        tracks.add(ranevsckiyTrack2);
-        ListView listView = (ListView) this.findViewById(R.id.track_list);
-        TrackAdapter trackAdapter = new TrackAdapter(this, tracks);
-        listView.setAdapter(trackAdapter);
+        listView_ = (ListView) this.findViewById(R.id.track_list);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        manager_.getTracks();
+
+        listView_.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("Position", Integer.toString(position));
+                int itemId = previews_.get(position).getId_();
+
                 Intent intent = new Intent(MainActivity.this,MapActivity.class);
+                intent.putExtra("SelectedItemId",itemId);
                 startActivity(intent);
             }
         });
     }
 
     @Override
+    public void updateUI(List<Preview> items) {
+        previews_ = items;
+        TrackAdapter trackAdapter = new TrackAdapter(this,items);
+        listView_.setAdapter(trackAdapter);
+    }
+
+    @Override
+    public Context getClientActivityContext() {
+        return this;
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -57,6 +78,10 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.action_update) {
+           manager_.sendAsyncTracksRequest();
             return true;
         }
 

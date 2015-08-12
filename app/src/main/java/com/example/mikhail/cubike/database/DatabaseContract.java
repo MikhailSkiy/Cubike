@@ -18,6 +18,7 @@ public class DatabaseContract {
         public static final String PLACE_ICON = "icon";
         public static final String LATITUDE = "latitude";
         public static final String LONGITUDE = "longitude";
+        public static final String TRACK_ID = "track_id";
     }
 
     /**
@@ -30,6 +31,8 @@ public class DatabaseContract {
         public static final String DESCRIPTION = "description";
         public static final String LENGTH = "length";
         public static final String RATING = "rating";
+        public static final String ICON = "icon";
         public static final String COMPLEXITY = "complexity";
+
     }
 }

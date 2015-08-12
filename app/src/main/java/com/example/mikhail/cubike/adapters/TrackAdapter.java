@@ -1,6 +1,7 @@
 package com.example.mikhail.cubike.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mikhail.cubike.R;
-import com.example.mikhail.cubike.model.Track;
+import com.example.mikhail.cubike.model.Preview;
 
 import java.util.List;
 
 /**
  * Created by Mikhail on 19.07.2015.
  */
-public class TrackAdapter extends ArrayAdapter<Track>{
+public class TrackAdapter extends ArrayAdapter<Preview>{
 
-    private final int VIEW_TYPE_SELECTED = 0;
-    private final int VIEW_TYPE_OTHERS = 1;
+    private final int VIEW_TYPE_CURRENT_CITY= 0;
+    private final int VIEW_TYPE_TRACKS = 1;
 
     private static class ViewHolder{
         TextView titleText_;
@@ -33,14 +34,30 @@ public class TrackAdapter extends ArrayAdapter<Track>{
         ImageView length_;
     }
 
-    public TrackAdapter(Context context,List<Track> values){
+    public TrackAdapter(Context context,List<Preview> values){
         super(context,R.layout.track_list_item,values);
     }
+
+    @Override
+   public int getItemViewType(int position){
+        return (position == 0) ? VIEW_TYPE_CURRENT_CITY : VIEW_TYPE_TRACKS;
+    }
+
+    @Override
+    public int getViewTypeCount(){
+        return 2;
+    }
+
+//    @Override
+//    public View newView(Context context, List<Track> values,ViewGroup parent){
+//
+//    }
 
 
     @Override
     public View getView(int position,View convertView,ViewGroup parent){
         ViewHolder viewHolder;
+
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.track_list_item, parent, false);
@@ -55,18 +72,16 @@ public class TrackAdapter extends ArrayAdapter<Track>{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.titleText_.setText(getItem(position).getTitle());
-        viewHolder.descriptionText_.setText(getItem(position).getDescription());
-        viewHolder.durationText_.setText(Double.toString(getItem(position).getDuration()));
-        viewHolder.lengthText_.setText(Integer.toString(getItem(position).getLength()));
+        viewHolder.titleText_.setText(getItem(position).getTitle_());
+        viewHolder.descriptionText_.setText(getItem(position).getDescription_());
+        viewHolder.durationText_.setText(Double.toString(getItem(position).getDuration_()));
+        viewHolder.lengthText_.setText(Integer.toString(getItem(position).getLength_()));
 
-        //TODO Убрать грязный трюк
-        if (position==0) {
-            viewHolder.icon_.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ranevskaya));
+        if (getItem(position).getIcon_()!= null) {
+            Bitmap bmp1 = BitmapFactory.decodeByteArray(getItem(position).getIcon_(), 0, getItem(position).getIcon_().length);
+            viewHolder.icon_.setImageBitmap(bmp1);
         }
-        if (position ==1){
-            viewHolder.icon_.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(),R.drawable.checkhov));
-        }
+
         return convertView;
     }
 }
